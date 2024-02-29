@@ -1,5 +1,6 @@
 # vpnSplitTunneling
 
-До запуска скрипта подключитесь к VPN.
-Запустите скрипт передав в качестве аргумента файл со списком необходимых хостов, для которых потребуется создать маршруты через VPN
-./main.sh hosts
+Connect to the VPN before running the script. 
+
+Run the script by passing as an argument a file with a list of hosts for which you want to create routes through the VPN
+`./main.sh hosts`
