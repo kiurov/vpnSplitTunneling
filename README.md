@@ -1,6 +1,6 @@
 # vpnSplitTunneling
 
-## VPN split tunneling for macOS. 
+## VPN split tunneling for  macOS 💻 
 
 Connect to the VPN before running the script. 
 
