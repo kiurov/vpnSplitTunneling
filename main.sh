@@ -66,8 +66,8 @@ addingNetworks () {
         # net=$(nslookup $domainName | gawk '$1~/ddress:/&&$2!~/#/{print $2}' | gawk 'BEGIN{FS=OFS="."}{print $1,$2,$3,"0"}')
         sudo route -n add $ip -interface $interface
         # sudo route -n add -net $net -interface $interface
-        # sudo tee -a /etc/hosts <<< "$ip \t $domainName"
-        echo "$ip\t$domainName" | sudo tee -a /etc/hosts
+        sudo tee -a /etc/hosts <<< "$ip $domainName"
+        # echo "$ip\t$domainName" | sudo tee -a /etc/hosts
     done
 }
 addingNetworks &> /dev/null
