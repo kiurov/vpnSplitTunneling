@@ -58,23 +58,18 @@ echo "##########################################################################
 echo "Deletion old hosts from the file /etc/hosts, adding networks to the routing table for the VPN interface $interface, refreshing hosts in /etc/hosts"
 # domainName=
 addingNetworks () {
-    # for domainName in $(echoDomainNames)
     for domainName in $listOfHosts
     do
         # sudo sed '/'$domainName'/d' /etc/hosts
         sudo sed -i '' '/'$domainName'/d' /etc/hosts
         ip=$(nslookup $domainName | gawk '$1~/ddress:/&&$2!~/#/{print $2}')
-        # ip=10.221.128.6
         # net=$(nslookup $domainName | gawk '$1~/ddress:/&&$2!~/#/{print $2}' | gawk 'BEGIN{FS=OFS="."}{print $1,$2,$3,"0"}')
-        # net=10.221.128.0
         sudo route -n add $ip -interface $interface
         # sudo route -n add -net $net -interface $interface
         # sudo tee -a /etc/hosts <<< "$ip \t $domainName"
         echo "$ip\t$domainName" | sudo tee -a /etc/hosts
     done
 }
-ip=4.3.5.140
-domainName=aefvwfbv.efwef.we
 addingNetworks &> /dev/null
 # addingNetworks
 echo "Done"
@@ -116,8 +111,6 @@ networksetup -getdnsservers Wi-Fi
 echo
 echo "Removing VPN DNS servers"
 # networksetup -getdnsservers Wi-Fi | tr -s '\r\n' ' ' | gawk '{print}'
-# sudo networksetup -setdnsservers Wi-Fi 10.230.192.77 10.230.192.78
-# sudo networksetup -setdnsservers Wi-Fi 192.168.0.1 10.230.192.77 10.230.192.78
 sudo networksetup -setdnsservers Wi-Fi $dnsServer
 # sudo networksetup -setdnsservers Wi-Fi empty
 # dnsServer=$(networksetup -getdnsservers Wi-Fi | tr -s '\r\n' ' ') | gawk '{print}' | gawk '{if ($1~"here") print "empty";else print}')
@@ -144,6 +137,3 @@ echo "##########################################################################
 echo
 
 exit 0
-
-
-sudo route -n add -net 10.184.194.0 -interface $interface
