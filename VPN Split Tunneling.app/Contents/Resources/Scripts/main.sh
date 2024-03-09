@@ -11,7 +11,6 @@ dnsServer=empty
 interface=$(netstat -in | egrep '([0-9]{1,3}[\.]){3}[0-9]{1,3}' | awk '$1!~/^en0$/&&$3!~/^127/{print $1}')
 excludeGateway=$(netstat -rnl -f inet | awk '$8~/'$interface'/{print $2}' | sort | uniq -c | awk '$1~/^1$/{print $2}')
 listOfHosts=$(awk '$1~/[a-z]/{print}' $1)
-listOfHosts=$(awk '$1~/[a-z]/{print}' ~/GitHub/hosts)
 addingNetworks () {
     for domainName in $listOfHosts
     do
@@ -21,7 +20,6 @@ addingNetworks () {
         sudo tee -a /etc/hosts <<< "$ip $domainName"
     done
 }
-#addingNetworks &> /dev/null
 addingNetworks
 
 removingNetAndIp () {
@@ -45,6 +43,5 @@ removingNetAndIp () {
         sudo route -n delete $ip -interface $interface
     done
 }
-#removingNetAndIp &> /dev/null
 removingNetAndIp
 sudo networksetup -setdnsservers Wi-Fi $dnsServer

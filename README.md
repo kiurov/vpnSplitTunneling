@@ -1,9 +1,3 @@
-# vpnSplitTunneling
+# VPN split tunneling app for macOS 
 
-## VPN split tunneling for  macOS 💻 
-
-Connect to the VPN before running the script. 
-
-Run the script by passing as an argument a file with a list of hosts for which you want to create routes through the VPN
-
-`./main.sh hosts`
+If you need to split internet traffic to access, for example, company resources, you can use this application. All you need to do after connecting to the VPN is to launch the application and select the file that lists the domains to which you need to access through the company VPN. All other traffic will follow the default route.
