@@ -6,11 +6,30 @@ if [ -z "$1" ]; then
     exit 2
 fi
 
+logFile=$HOME/vpnSplitTunneling.log
+
+echo variable logFile is $logFile >> $logFile
+echo >> $logFile
+
+netstat -ranl -f inet > $logFile
+echo >> $logFile
 
 dnsServer=empty
+echo variable dnsServer is $dnsServer >> $logFile
+echo >> $logFile
+
 interface=$(netstat -in | egrep '([0-9]{1,3}[\.]){3}[0-9]{1,3}' | awk '$1!~/^en0$/&&$3!~/^127/{print $1}')
+echo variable interface is $interface >> $logFile
+echo >> $logFile
+
 excludeGateway=$(netstat -rnl -f inet | awk '$8~/'$interface'/{print $2}' | sort | uniq -c | awk '$1~/^1$/{print $2}')
+echo variable excludeGateway is $excludeGateway >> $logFile
+echo >> $logFile
+
 listOfHosts=$(awk '$1~/[a-z]/{print}' $1)
+echo variable listOfHosts is $listOfHosts >> $logFile
+echo >> $logFile
+
 addingNetworks () {
     for domainName in $listOfHosts
     do
@@ -20,7 +39,8 @@ addingNetworks () {
         sudo tee -a /etc/hosts <<< "$ip $domainName"
     done
 }
-addingNetworks
+addingNetworks >> $logFile
+echo >> $logFile
 
 removingNetAndIp () {
     for net in $(netstat -rnl -f inet | awk '$2!~/'$excludeGateway'/&&$2!~/'$interface'/&&$8~/'$interface'/&&$1~/\//{print $1}')
@@ -43,5 +63,14 @@ removingNetAndIp () {
         sudo route -n delete $ip -interface $interface
     done
 }
-removingNetAndIp
+removingNetAndIp | column -t >> $logFile
+echo >> $logFile
+
 sudo networksetup -setdnsservers Wi-Fi $dnsServer
+networksetup -getdnsservers Wi-Fi >> $logFile
+echo >> $logFile
+
+netstat -ranl -f inet | awk '$1~/estination/||$8~/'$interface'/{print $1,$2,$3}' | column -t >> $logFile
+echo >> $logFile
+
+cat /etc/hosts >> $logFile
